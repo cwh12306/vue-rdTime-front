@@ -1,5 +1,8 @@
 @import "./normalize.css";
-
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 :root {
   --color-text: #666;
   --color-high-text: #ff5777;
