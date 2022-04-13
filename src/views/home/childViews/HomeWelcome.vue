@@ -56,26 +56,71 @@
           </div>
         </div>
       </div>
-      <div class="side-bar"></div>
+      <div class="side-bar">
+        <div class="popularContent-header">Popular Content</div>
+        <div class="popularContent">
+          <div class="borderDiv">
+            <div class="commonDiv colors-and-shapes" @click="openPdf1"></div>
+            <p class="text-link" @click="openPdf1">给图形上色</p>
+          </div>
+          <div class="borderDiv">
+            <div
+              class="commonDiv comparing-numbers-100"
+              @click="openPdf2"
+            ></div>
+            <p class="text-link" @click="openPdf2">比较100以内的数字</p>
+          </div>
+          <div class="borderDiv">
+            <div class="commonDiv puppy" @click="openPdf3"></div>
+            <p class="text-link" @click="openPdf3">找到文本中的单词</p>
+          </div>
+          <div class="borderDiv">
+            <div class="commonDiv math-square" @click="openPdf4"></div>
+            <p class="text-link" @click="openPdf4">数字矩阵</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import ExploreBlock from "$components/content/homeWelcome/ExploreBlock.vue";
+
   import { getMediaResource } from "$network/homeWelcome.js";
+
   export default {
     name: "HomeWelcome",
     components: { ExploreBlock },
     methods: {
+      openPdf1() {
+        window.open("http://localhost:8088/tb/images/colors-and-shapes-1.pdf");
+      },
+      openPdf2() {
+        window.open(
+          "http://localhost:8088/tb/images/comparing-numbers-100.pdf"
+        );
+      },
+      openPdf3() {
+        window.open("http://localhost:8088/tb/images/puppy.pdf");
+      },
+      openPdf4() {
+        window.open("http://localhost:8088/tb/images/math-square.pdf");
+      },
       chosePage(index) {
+        window.scrollTo(0, 800);
         this.pageNumber = index;
         getMediaResource(this.pageSize, this.pageNumber).then((res) => {
           this.mediaResource = res;
         });
       },
       nextPage() {
-        if (this.pageNumber < this.total) this.pageNumber++;
+        if (this.pageNumber < this.total) {
+          this.pageNumber++;
+          window.scrollTo(0, 800);
+        } else {
+          return;
+        }
         getMediaResource(this.pageSize, this.pageNumber).then((res) => {
           this.mediaResource = res;
         });
@@ -108,6 +153,9 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
+  .homeWelcome {
+    height: 2060px;
+  }
   .container {
     width: 1150px;
     margin: auto;
@@ -120,8 +168,6 @@
   .side-bar {
     float: left;
     width: 24%;
-    height: 2000px;
-    background: #bfbfbf;
   }
   .divider {
     height: 3px;
@@ -166,5 +212,57 @@
   .pageButtonSelected {
     background: #ed2947;
     color: white;
+  }
+  .popularContent-header {
+    height: 40px;
+    width: 100%;
+    background: #a597e7;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    line-height: 40px;
+    padding-left: 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .popularContent {
+    border: 1px solid #e7e7e7;
+  }
+  .borderDiv {
+    border-bottom: 1px solid #e7e7e7;
+  }
+  .colors-and-shapes {
+    background: url(~$assets/img/colors-and-shapes.jpg);
+  }
+  .comparing-numbers-100 {
+    background: url(~$assets/img/comparing-numbers-100.jpg);
+  }
+  .puppy {
+    background: url(~$assets/img/puppy.jpg);
+  }
+  .math-square {
+    background: url(~$assets/img/math-square.jpg);
+  }
+
+  .commonDiv {
+    width: 240px;
+    height: 305px;
+    margin: 16px;
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 1px solid #e7e7e7;
+  }
+  .commonDiv:hover {
+    cursor: pointer;
+  }
+  .text-link {
+    color: #8022b5;
+    font-size: 14px;
+    margin: 16px;
+  }
+  .text-link:hover {
+    color: #e13123;
+    cursor: pointer;
   }
 </style>

@@ -1,13 +1,15 @@
 <template>
   <div class="exploreBlock">
-    <img class="img" :src="img" alt="" />
+    <img @click="exploreDetail" class="img" :src="img" alt="" />
     <div class="content">
-      <span class="classification">{{ classification }}</span
+      <span @click="exploreDetail" class="classification">{{
+        classification
+      }}</span
       ><br /><br />
-      <span class="title">{{ title }}</span
+      <span @click="exploreDetail" class="title">{{ title }}</span
       ><br /><br />
       <span class="date">{{ publicDate }}</span>
-      <p class="textContent">{{ content }}</p>
+      <p @click="exploreDetail" class="textContent">{{ content }}</p>
     </div>
   </div>
 </template>
@@ -15,6 +17,16 @@
 <script>
   export default {
     name: "ExploreBlock",
+    methods: {
+      exploreDetail() {
+        this.$router.push({
+          path: "/explore",
+          query: {
+            id: this.id,
+          },
+        });
+      },
+    },
     props: {
       id: {
         type: Number,

@@ -72,11 +72,8 @@
   export default {
     name: "Footer",
     data() {
-      return {
-        screenHeight: 0,
-      };
+      return {};
     },
-    mounted() {},
   };
 </script>
 
@@ -109,9 +106,9 @@
   }
   .footer {
     position: absolute;
-    top: 2516px;
     width: 100%;
     height: 523px;
+    margin-top: 40px;
     background: black;
   }
   .title {

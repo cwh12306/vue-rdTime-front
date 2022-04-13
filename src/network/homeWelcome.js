@@ -6,3 +6,9 @@ export function getMediaResource(pageSize, pageNumber) {
     params: { pageSize, pageNumber },
   });
 }
+export function getDetail(id) {
+  return request({
+    url: "/tb/getDetail",
+    params: { id },
+  });
+}
