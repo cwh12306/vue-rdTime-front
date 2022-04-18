@@ -2,21 +2,20 @@
   <div class="welcome">
     <div class="title">Welcome to TLSBooks.com</div>
     <div class="title2">Educational Worksheets</div>
-    <div class="login" @click="login" ref="loginSign">
+    <div class="login" @click="login" ref="loginSign" v-if="!isLogin">
       <i class="fa-solid fa-arrow-right-to-bracket"></i>
     </div>
+    <div class="personalCenter" v-else>{{ username }}</div>
     <transition name="signIn"
-      ><div class="signIn" v-show="isShow">登录</div>
+      ><div class="signIn" v-show="isShow && !isLogin">登录</div>
     </transition>
     <transition name="signIn2">
-      <div class="triangle" v-show="isShow"></div>
+      <div class="triangle" v-show="isShow && !isLogin"></div>
     </transition>
   </div>
 </template>
 
 <script>
-  // @ is an alias to /src
-
   export default {
     name: "Welcome",
     components: {},
@@ -28,9 +27,17 @@
     data() {
       return {
         isShow: false,
+        isLogin: false,
+        username: "",
+        avatar: "",
+        role: 1,
       };
     },
     mounted() {
+      this.isLogin = sessionStorage.getItem("isLogin");
+      this.username = sessionStorage.getItem("username");
+      this.avatar = sessionStorage.getItem("avatar");
+      this.role = sessionStorage.getItem("role");
       const loginSign = this.$refs.loginSign;
       loginSign.onmouseenter = () => {
         this.isShow = true;
@@ -109,5 +116,12 @@
     top: 18px;
     border: 6px solid transparent;
     border-left: 6px solid #146ebe;
+  }
+  .personalCenter {
+    font-size: 18px;
+    position: absolute;
+    right: 120px;
+    color: black;
+    line-height: 50px;
   }
 </style>

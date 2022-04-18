@@ -1,8 +1,8 @@
 import { request } from "$network/request";
 
-export function getUser(username, password) {
+export function getUser(email, password, switchLogin) {
   return request({
-    url: "/hm/getUser",
-    params: { username: username, password: password },
+    url: "/tb/getUser",
+    params: { email, password, switchLogin },
   });
 }
