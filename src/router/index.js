@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/home/Home.vue";
 import Login from "../views/login/Login.vue";
+import PersonalCenter from "../views/personalCenter/PersonalCenter.vue";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
+  },
+  {
+    path: "/personalCenter",
+    name: "PersonalCenter",
+    component: PersonalCenter,
   },
 ];
 

@@ -1,10 +1,6 @@
 <template>
   <div class="login">
-    <div class="login-header">
-      <div class="flag" @click="backToHome">
-        <i class="fa-regular fa-flag"></i>
-      </div>
-    </div>
+    <LoginHeader />
     <div class="login-content">
       <div class="threeD-stage">
         <div class="face" :class="{ faceRotate: isRotate }">
@@ -68,37 +64,57 @@
           <div class="login-title">Register</div>
           <p class="inputText">用户名</p>
           <input
+            @blur="validateUsername"
             v-model="username"
             class="login-input"
             type="text"
             name="username"
             placeholder="请输入用户名"
+            :class="[
+              { correct: registerArr[0].check === 'correct' },
+              { error: registerArr[0].check === 'error' },
+            ]"
           />
           <p class="inputText">Email邮箱地址</p>
           <input
+            @blur="validateRegisterEmail"
             v-model="registerEmail"
             class="login-input"
             type="email"
             name="registerEmail"
             placeholder="请输入新的邮箱地址"
+            :class="[
+              { correct: registerArr[1].check === 'correct' },
+              { error: registerArr[1].check === 'error' },
+            ]"
           />
           <p class="inputText">密码</p>
           <input
+            @blur="validateRegisterPassword"
             v-model="registerPassword"
             class="login-input"
             type="password"
             name="registerPassword"
             placeholder="请输入密码"
+            :class="[
+              { correct: registerArr[2].check === 'correct' },
+              { error: registerArr[2].check === 'error' },
+            ]"
           />
           <p class="inputText">确认密码</p>
           <input
+            @blur="validateConfirmPassword"
             v-model="confirmPassword"
             class="login-input"
             type="password"
             name="confirmPassword"
             placeholder="请再次输入密码"
+            :class="[
+              { correct: registerArr[3].check === 'correct' },
+              { error: registerArr[3].check === 'error' },
+            ]"
           />
-          <button class="button-login">注册</button>
+          <button class="button-login" @click="register">注册</button>
         </div>
       </div>
       <div class="register" @click="rotateLogin">
@@ -106,18 +122,19 @@
         <i class="fa-solid fa-hand-point-left"></i>
       </div>
     </div>
-    <div class="login-footer">
-      <p class="text">Go Look At Some TLSBooks</p>
-      <p class="copyright">Copyright &copy 2000-2022 Publishing</p>
-    </div>
+    <LoginFooter />
   </div>
 </template>
 
 <script>
   import { getUser } from "$network/login.js";
+  import { getOneUser, register } from "$network/register.js";
+  import LoginHeader from "./login-header/LoginHeader.vue";
+  import LoginFooter from "./login-footer/LoginFooter.vue";
 
   export default {
     name: "Login",
+    components: { LoginHeader, LoginFooter },
     data() {
       return {
         //是否旋转（注册or登录）
@@ -136,15 +153,79 @@
           { id: "email", flag: false, check: "", msg: "请输入正确的邮箱格式" },
           { id: "password", flag: false, check: "", msg: "密码不能为空" },
         ],
-        registerArr: [],
+        registerArr: [
+          { id: "username", flag: false, check: "", msg: "用户名不能为空" },
+          {
+            id: "registerEmail",
+            flag: false,
+            check: "",
+            msg: "请输入正确的邮箱格式",
+          },
+          {
+            id: "registerPassword",
+            flag: false,
+            check: "",
+            msg: "密码不能少于6位或多于12位",
+          },
+          {
+            id: "registerPasswordConfirm",
+            flag: false,
+            check: "",
+            msg: "密码要与上面一致",
+          },
+        ],
       };
     },
     methods: {
-      backToHome() {
-        this.$router.replace("/");
-      },
       rotateLogin() {
         this.isRotate = !this.isRotate;
+      },
+      register() {
+        const errArr = [];
+        this.registerArr.forEach((err) => {
+          if (!err.flag) {
+            errArr.push(err.msg);
+          }
+        });
+        if (errArr.length === 0) {
+          getOneUser(this.registerEmail).then((res) => {
+            if (res) {
+              this.registerArr[1].flag = false;
+              this.registerArr[1].check = "error";
+              this.$toast.show(false, "邮箱已注册");
+            } else {
+              this.registerArr[1].flag = true;
+              this.registerArr[1].check = "correct";
+              //注册
+              register(
+                this.registerEmail,
+                this.registerPassword,
+                this.username
+              ).then((res) => {
+                if (res === 1) {
+                  this.$toast.show(true, "注册成功🎉🎉🎉");
+                  //清空表单
+                  this.username = "";
+                  this.registerEmail = "";
+                  this.registerPassword = "";
+                  this.confirmPassword = "";
+                  //清空表单验证和表单效果
+                  this.registerArr.forEach((item) => {
+                    item.check = "";
+                    item.flag = false;
+                  });
+                  //翻转回登录
+                  this.rotateLogin();
+                } else {
+                  this.$toast.show(false, "注册失败");
+                }
+              });
+            }
+          });
+        } else {
+          const errMsg = errArr.shift();
+          this.$toast.show(false, errMsg);
+        }
       },
       login() {
         const errArr = [];
@@ -156,21 +237,34 @@
         if (errArr.length === 0) {
           getUser(this.email, this.password, this.switchLogin).then((res) => {
             if (res) {
-              sessionStorage.setItem("isLogin", true);
-              sessionStorage.setItem("username", res.username);
-              sessionStorage.setItem("avatar", res.avatar);
-              sessionStorage.setItem(
-                "role",
-                res.role === 0 ? "管理员" : "普通用户"
-              );
+              if (!this.rememberMe) {
+                sessionStorage.setItem("id", res.id);
+                sessionStorage.setItem("isLogin", true);
+                sessionStorage.setItem("username", res.username);
+                sessionStorage.setItem("avatar", res.avatar);
+                sessionStorage.setItem(
+                  "role",
+                  res.role === 0 ? "管理员" : "普通用户"
+                );
+              } else {
+                localStorage.setItem("id", res.id);
+                localStorage.setItem("rememberMe", true);
+                localStorage.setItem("isLogin", true);
+                localStorage.setItem("username", res.username);
+                localStorage.setItem("avatar", res.avatar);
+                localStorage.setItem(
+                  "role",
+                  res.role === 0 ? "管理员" : "普通用户"
+                );
+              }
               this.$router.replace("/");
               this.$toast.show(true, "登录成功🎉🎉🎉");
             } else {
-              this.$toast.show(false, "登录失败，邮箱或密码错误");
+              this.$toast.show(false, "登录失败，邮箱或密码错误或您不是管理员");
             }
           });
         } else {
-          const errMsg = errArr.pop();
+          const errMsg = errArr.shift();
           this.$toast.show(false, errMsg);
         }
       },
@@ -189,6 +283,42 @@
         this.password !== ""
           ? (this.loginArr[1].check = "correct")
           : (this.loginArr[1].check = "error");
+      },
+      validateUsername() {
+        this.registerArr[0].flag = this.username !== "";
+        this.username !== ""
+          ? (this.registerArr[0].check = "correct")
+          : (this.registerArr[0].check = "error");
+      },
+      validateRegisterEmail() {
+        const reg = new RegExp(
+          /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+        );
+        let res = reg.test(this.registerEmail);
+        res
+          ? (this.registerArr[1].check = "correct")
+          : (this.registerArr[1].check = "error");
+        this.registerArr[1].flag = res;
+      },
+      validateRegisterPassword() {
+        this.registerArr[2].flag =
+          this.registerPassword.length >= 6 &&
+          this.registerPassword.length <= 12;
+        if (
+          this.registerPassword.length < 6 ||
+          this.registerPassword.length > 12
+        ) {
+          this.registerArr[2].check = "error";
+        } else {
+          this.registerArr[2].check = "correct";
+        }
+      },
+      validateConfirmPassword() {
+        this.registerArr[3].flag =
+          this.confirmPassword === this.registerPassword;
+        this.confirmPassword === this.registerPassword
+          ? (this.registerArr[3].check = "correct")
+          : (this.registerArr[3].check = "error");
       },
     },
   };
@@ -255,55 +385,12 @@
       transform: translateX(0%);
     }
   }
-  .login-header {
-    background: white;
-    height: 74px;
-    width: 100%;
-    box-shadow: 0 0.25rem 0.125rem 0 rgba(0, 0, 0, 0.025);
-    position: relative;
-    z-index: 999;
-  }
   .login-content {
     height: calc(100vh - 162px);
     width: 100%;
     background: url(~$assets/img/login-bg.png);
   }
-  .flag {
-    color: #538dd7;
-    font-size: 20px;
-    position: absolute;
-    left: 20%;
-    top: 25px;
-  }
-  .flag:hover {
-    cursor: pointer;
-    color: #264977;
-  }
-  .login-footer {
-    background: #183153;
-    width: 100%;
-    height: 88px;
-    position: fixed;
-    bottom: 0;
-    line-height: 88px;
-  }
-  .text {
-    margin-left: 200px;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    font-family: "Aktiv Grotesk", "Segoe UI", Helvetica, Arial, sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  }
-  .copyright {
-    position: absolute;
-    right: 200px;
-    top: 0;
-    font-size: 14px;
-    color: #c3c6d1;
-    font-family: "Aktiv Grotesk", "Segoe UI", Helvetica, Arial, sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  }
+
   .threeD-stage {
     position: absolute;
     perspective: 1500px;
@@ -446,10 +533,13 @@
   }
   .correct {
     border: 0.125rem solid #2ecc71;
-    box-shadow: 2px 2px 5px #1a8a49;
+    box-shadow: 0 2px 2px -2px hsla(152, 63%, 49%, 0.499),
+      0 2px 10px hsla(152, 63%, 49%, 0.499),
+      0 2px 5px 2px hsla(152, 63%, 49%, 0.499);
   }
   .error {
     border: 0.125rem solid #e74c3c;
-    box-shadow: 2px 2px 5px #a13023;
+    box-shadow: 0 2px 2px -2px rgba(231, 76, 60, 0.5),
+      0 2px 10px rgba(231, 76, 60, 0.5), 0 2px 5px 2px rgba(231, 76, 60, 0.5);
   }
 </style>
