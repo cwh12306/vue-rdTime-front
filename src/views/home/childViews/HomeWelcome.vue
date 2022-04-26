@@ -149,7 +149,7 @@
   .welcoming {
     width: 100%;
     height: 100px;
-    background: url(~$assets/img/welcome.png);
+    background: url(/img/welcome.png);
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
@@ -232,16 +232,16 @@
     border-bottom: 1px solid #e7e7e7;
   }
   .colors-and-shapes {
-    background: url(~$assets/img/colors-and-shapes.jpg);
+    background: url(/img/colors-and-shapes.jpg);
   }
   .comparing-numbers-100 {
-    background: url(~$assets/img/comparing-numbers-100.jpg);
+    background: url(/img/comparing-numbers-100.jpg);
   }
   .puppy {
-    background: url(~$assets/img/puppy.jpg);
+    background: url(/img/puppy.jpg);
   }
   .math-square {
-    background: url(~$assets/img/math-square.jpg);
+    background: url(/img/math-square.jpg);
   }
 
   .commonDiv {

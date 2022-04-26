@@ -71,10 +71,10 @@
     components: { SecondNav },
     methods: {
       homeClick() {
-        this.$router.push("/");
+        this.$router.replace("/");
       },
       gradeClick() {
-        this.$router.push("/grade");
+        this.$router.replace("/grade");
       },
       subjectClick() {
         console.log(3);
@@ -144,7 +144,7 @@
     position: absolute;
     width: 188px;
     height: 114px;
-    background-image: url(~$assets/img/logo.png);
+    background-image: url(/img/logo.png);
     left: 360px;
   }
   .nav-bar {

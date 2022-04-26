@@ -1,19 +1,27 @@
 <template>
   <div class="avatar">
-    <img width="28" height="28" :src="avatarUrl" alt="" />
+    <img ref="avatar" width="28" height="28" alt="" />
   </div>
 </template>
 
 <script>
+  import { getAvatar } from "$network/personalCenter.js";
   export default {
     name: "Avatar",
-    props: {
-      avatarUrl: {
-        type: String,
-      },
+    data() {
+      return {
+        id:
+          sessionStorage.getItem("user-id") || localStorage.getItem("user-id"),
+      };
     },
     mounted() {
-      console.log(this.avatarUrl);
+      this.id &&
+        getAvatar(this.id).then((res) => {
+          const imageUrl = (window.URL || window.webkitURL).createObjectURL(
+            res
+          );
+          this.$refs.avatar.src = imageUrl;
+        });
     },
   };
 </script>

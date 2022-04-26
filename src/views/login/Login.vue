@@ -237,21 +237,20 @@
         if (errArr.length === 0) {
           getUser(this.email, this.password, this.switchLogin).then((res) => {
             if (res) {
+              console.log(res);
               if (!this.rememberMe) {
-                sessionStorage.setItem("id", res.id);
+                sessionStorage.setItem("user-id", res.id);
                 sessionStorage.setItem("isLogin", true);
                 sessionStorage.setItem("username", res.username);
-                sessionStorage.setItem("avatar", res.avatar);
                 sessionStorage.setItem(
                   "role",
                   res.role === 0 ? "管理员" : "普通用户"
                 );
               } else {
-                localStorage.setItem("id", res.id);
+                localStorage.setItem("user-id", res.id);
                 localStorage.setItem("rememberMe", true);
                 localStorage.setItem("isLogin", true);
                 localStorage.setItem("username", res.username);
-                localStorage.setItem("avatar", res.avatar);
                 localStorage.setItem(
                   "role",
                   res.role === 0 ? "管理员" : "普通用户"
@@ -388,7 +387,7 @@
   .login-content {
     height: calc(100vh - 162px);
     width: 100%;
-    background: url(~$assets/img/login-bg.png);
+    background: url(/img/login-bg.png);
   }
 
   .threeD-stage {

@@ -200,7 +200,7 @@
   .footer-bg {
     height: 450px;
     width: 100%;
-    background: url(~$assets/img/footer-bg.png);
+    background: url(/img/footer-bg.png);
   }
   .copyright {
     width: 100%;

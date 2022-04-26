@@ -7,7 +7,7 @@
     </div>
     <div class="personalCenter" v-show="isLogin" ref="personalCenter">
       <div class="cursor">
-        <div class="avatar"><Avatar :avatarUrl="avatar" /></div>
+        <div class="avatar"><Avatar /></div>
         <span>
           {{ username }}
         </span>
@@ -47,8 +47,8 @@
         isShow: false,
         isLogin: false,
         username: "",
-        avatar: "",
         role: 1,
+        id: 0,
         personalCenterIsShow: false,
       };
     },
@@ -56,13 +56,13 @@
       if (localStorage.getItem("rememberMe")) {
         this.isLogin = localStorage.getItem("isLogin");
         this.username = localStorage.getItem("username");
-        this.avatar = localStorage.getItem("avatar");
         this.role = localStorage.getItem("role");
+        this.id = localStorage.getItem("user-id");
       } else if (sessionStorage.getItem("isLogin")) {
         this.isLogin = sessionStorage.getItem("isLogin");
         this.username = sessionStorage.getItem("username");
-        this.avatar = sessionStorage.getItem("avatar");
         this.role = sessionStorage.getItem("role");
+        this.id = sessionStorage.getItem("user-id");
       }
       const loginSign = this.$refs.loginSign;
       loginSign.onmouseenter = () => {

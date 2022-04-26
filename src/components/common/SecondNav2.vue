@@ -31,20 +31,20 @@
         this.$emit("nav-active", data);
       },
       pushToPC() {
-        this.$router.push("/personalCenter");
+        this.$router.replace("/personalCenter");
       },
       signOut() {
         if (localStorage.getItem("rememberMe")) {
           localStorage.removeItem("rememberMe");
           localStorage.removeItem("isLogin");
           localStorage.removeItem("username");
-          localStorage.removeItem("avatar");
           localStorage.removeItem("role");
+          localStorage.removeItem("user-id");
         } else {
           sessionStorage.removeItem("isLogin");
           sessionStorage.removeItem("username");
-          sessionStorage.removeItem("avatar");
           sessionStorage.removeItem("role");
+          sessionStorage.removeItem("user-id");
         }
         this.isLogin = false;
         this.username = "";

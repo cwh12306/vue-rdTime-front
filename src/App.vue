@@ -29,5 +29,5 @@
 </script>
 
 <style scoped>
-  @import "~$assets/css/base.css";
+  @import "/css/base.css";
 </style>

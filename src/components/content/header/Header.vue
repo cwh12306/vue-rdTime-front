@@ -21,7 +21,7 @@
   .backImg {
     width: 100%;
     height: 252px;
-    background-image: url(~$assets/img/headerBackImg.jpg);
+    background-image: url(/img/headerBackImg.jpg);
     background-position: 100% 100%;
     background-repeat: no-repeat;
     background-size: cover;
