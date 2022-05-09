@@ -30,19 +30,11 @@
               删除资源<i class="fa-solid fa-circle-minus"></i></li
           ></router-link>
           <router-link
-            to="/personalCenter/update"
-            active-class="current"
-            replace
-          >
-            <li @click="tabActive" :class="{ current: currentClickTab === 3 }">
-              修改资源<i class="fa-solid fa-pen"></i></li
-          ></router-link>
-          <router-link
             to="/personalCenter/comment"
             active-class="current"
             replace
           >
-            <li @click="tabActive" :class="{ current: currentClickTab === 4 }">
+            <li @click="tabActive" :class="{ current: currentClickTab === 3 }">
               用户评论<i class="fa-solid fa-comment-dots"></i></li
           ></router-link>
         </ul>
@@ -51,16 +43,8 @@
             to="/personalCenter/userComment"
             active-class="current"
             replace
-            ><li @click="tabActive" :class="{ current: currentClickTab === 5 }">
+            ><li @click="tabActive" :class="{ current: currentClickTab === 4 }">
               发表过的评论<i class="fa-solid fa-comment-dots"></i></li
-          ></router-link>
-          <router-link
-            to="/personalCenter/userHistory"
-            active-class="current"
-            replace
-          >
-            <li @click="tabActive" :class="{ current: currentClickTab === 6 }">
-              浏览过的历史<i class="fa-solid fa-clock-rotate-left"></i></li
           ></router-link>
         </ul>
       </div>
@@ -111,17 +95,11 @@
           case "删除资源":
             this.currentClickTab = 2;
             break;
-          case "修改资源":
+          case "用户评论":
             this.currentClickTab = 3;
             break;
-          case "用户评论":
-            this.currentClickTab = 4;
-            break;
           case "发表过的评论":
-            this.currentClickTab = 5;
-            break;
-          case "浏览过的历史":
-            this.currentClickTab = 6;
+            this.currentClickTab = 4;
             break;
         }
       },
@@ -150,6 +128,17 @@
               reader.onload = (ev) => {
                 avatar.src = ev.target.result;
               };
+              if (localStorage.getItem("rememberMe")) {
+                localStorage.setItem(
+                  "avatar",
+                  `http://localhost:8088/tb/images/avatar/${this.id}.jpg`
+                );
+              } else {
+                sessionStorage.setItem(
+                  "avatar",
+                  `http://localhost:8088/tb/images/avatar/${this.id}.jpg`
+                );
+              }
             } else {
               //上传失败
               this.$toast.show(false, "上传失败");

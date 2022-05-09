@@ -13,3 +13,10 @@ export function getAvatar(id) {
     responseType: "blob",
   });
 }
+
+export function delMediaResource(id) {
+  return request({
+    url: "/tb/delMediaResource",
+    params: { id },
+  });
+}

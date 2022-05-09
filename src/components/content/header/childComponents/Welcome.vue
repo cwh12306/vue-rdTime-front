@@ -7,6 +7,7 @@
     </div>
     <div class="personalCenter" v-show="isLogin" ref="personalCenter">
       <div class="cursor">
+        <div class="redDot" v-show="total !== 0">您有{{ total }}条新消息!</div>
         <div class="avatar"><Avatar /></div>
         <span>
           {{ username }}
@@ -30,6 +31,8 @@
 <script>
   import SecondNav2 from "$components/common/SecondNav2.vue";
   import Avatar from "$components/common/avatar/Avatar.vue";
+  import { getNewReply } from "$network/homeWelcome.js";
+
   export default {
     name: "Welcome",
     components: { Avatar, SecondNav2 },
@@ -50,6 +53,7 @@
         role: 1,
         id: 0,
         personalCenterIsShow: false,
+        total: 0,
       };
     },
     mounted() {
@@ -79,6 +83,11 @@
       personalCenter.onmouseleave = () => {
         this.personalCenterIsShow = false;
       };
+      //获取用户新的信息列表
+      getNewReply(this.id).then((res) => {
+        console.log(res);
+        this.total = res;
+      });
     },
   };
 </script>
@@ -88,6 +97,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    font-size: 14px;
   }
   .signIn-enter-active,
   .signIn-leave-active {
@@ -163,5 +173,30 @@
     color: black;
     line-height: 50px;
     height: 50px;
+  }
+  .avatar {
+    transform: translate(-2px, 4px);
+  }
+  .redDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff6b6b;
+    cursor: pointer;
+    z-index: 100;
+    transition: 1s;
+    font-size: 12px;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    margin: 0 0 0 auto;
+    transform: translate(4px, -10px);
+  }
+  .redDot:hover {
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 15px;
   }
 </style>

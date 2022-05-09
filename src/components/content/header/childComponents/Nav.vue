@@ -145,11 +145,11 @@
     width: 188px;
     height: 114px;
     background-image: url(/img/logo.png);
-    left: 360px;
+    left: 19%;
   }
   .nav-bar {
     position: absolute;
-    left: 1000px;
+    right: 10%;
   }
   .split {
     margin-top: 75px;

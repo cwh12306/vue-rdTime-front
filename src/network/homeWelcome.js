@@ -12,3 +12,16 @@ export function getDetail(id) {
     params: { id },
   });
 }
+
+export function getNewReply(uid) {
+  return request({
+    url: "/tb/getNewReply",
+    params: { uid },
+  });
+}
+export function getCommentAndReply(uid) {
+  return request({
+    url: "/tb/getCommentAndReply",
+    params: { uid },
+  });
+}

@@ -64,15 +64,22 @@
       <label class="uploadBigImg" for="uploadBigImg"
         ><i class="fa-solid fa-plus"></i
       ></label>
-      <img width="100" height="100" class="bigImg" ref="bigImg" src="" alt="" />
+      <img
+        width="100"
+        height="100"
+        class="bigImg"
+        ref="bigImg"
+        src="http://localhost:8088/tb/images/defaultImg.jpg"
+        alt=""
+      />
       <div @click="emptyContent" class="plate" v-show="content !== ''">
         <i class="fa-solid fa-xmark"></i>
       </div>
     </div>
     <div class="detailInfo">
-      <AddableForm />
+      <AddableForm :detailList="detailList" :indexList="indexList" />
     </div>
-    <button class="insertSubmitButton" @click="insertNew">新增</button>
+    <button class="insertSubmitButton" @click="insertNew">提交信息</button>
   </div>
 </template>
 
@@ -85,18 +92,47 @@
     components: { AddableForm },
     data() {
       return {
+        detailId: 0,
         title: "",
         classification: "",
         publicDate: "",
         content: "",
         file: null,
         insertArr: [
-          { id: "title", flag: false, check: "", msg: "标题不能为空" },
-          { id: "classification", flag: false, check: "", msg: "分类不能为空" },
-          { id: "publicDate", flag: false, check: "", msg: "发布日期不能为空" },
-          { id: "content", flag: false, check: "", msg: "描述内容不能为空" },
+          { id: "title", flag: false, check: "", msg: "封面信息标题不能为空" },
+          {
+            id: "classification",
+            flag: false,
+            check: "",
+            msg: "封面信息分类不能为空",
+          },
+          {
+            id: "publicDate",
+            flag: false,
+            check: "",
+            msg: "封面信息发布日期不能为空",
+          },
+          {
+            id: "content",
+            flag: false,
+            check: "",
+            msg: "封面信息描述内容不能为空",
+          },
           { id: "bigImg", flag: false, check: "", msg: "必须选择一张封面图片" },
         ],
+        //细节表单数组，每个对象代表一个表单。
+        detailList: [
+          {
+            text: "",
+            imgFile: null,
+            imgTitle: "",
+            imgDesc: "",
+          },
+        ],
+        //用来记录错误的细节表单的下标，如果里面为空，则说明所有的细节表单的内容都已经填上了。
+        indexList: [],
+        //用来控制提交只一次
+        disable: false,
       };
     },
     methods: {
@@ -132,16 +168,61 @@
           this.insertArr[2].check = "correct";
         }
       },
-      uploadImg() {
+      addMediaResource() {
         //上传图片通常要将文件参数放在FormDate对象中
         //创建FormDate实例
         let formData = new FormData();
-        formData.append("files", this.file);
+        formData.append("file", this.file);
+        formData.append("title", this.title);
+        formData.append("publicDate", this.publicDate);
+        formData.append("classification", this.classification);
+        formData.append("content", this.content);
+        //处理一下细节数组中的图片，待会图片单独再发起一个服务
+        const newDetailList = [];
+        const detailPicArr = [];
+        this.detailList.forEach((detail) => {
+          newDetailList.push({
+            newText: detail.text,
+            imgTitle: detail.imgTitle,
+            imgDesc: detail.imgDesc,
+          });
+          detailPicArr.push(detail.imgFile);
+        });
+        formData.append("detailList", JSON.stringify(newDetailList));
         //发送到服务器 等到点击提交按钮再发送给服务器
         axios
-          .post("http://localhost:8088/tb/uploadBigImg", formData)
+          .post("http://localhost:8088/tb/addMediaResource", formData)
           .then((res) => {
-            console.log(res);
+            console.log("res:" + res);
+            if (res.data === 0) {
+              this.$toast.show(false, "提交失败");
+            } else {
+              //返回封面信息的id，储存好后供细节图片插入
+              this.detailId = res.data;
+              console.log(this.detailId);
+              //由于转字符串，图片不能传过去，所以图片再处理一次。
+              //上一个插入成功之后，再发一次
+              let newFormData = new FormData();
+              detailPicArr.forEach((pic, index) => {
+                newFormData.append("files", pic);
+              });
+              newFormData.append("id", this.detailId);
+              axios
+                .post("http://localhost:8088/tb/uploadDetailPic", newFormData)
+                .then((res) => {
+                  console.log("res:" + res);
+                  if (res.data === 0) {
+                    this.$toast.show(false, "提交失败");
+                  } else {
+                    // 提交完成，所有表单清空(刷新组件)
+                    this.disable = true;
+                    setTimeout(() => {
+                      this.$router.go(0);
+                    }, 2000);
+                    this.$toast.show(true, "提交成功!");
+                  }
+                });
+            }
           });
       },
       changeFile(e) {
@@ -157,8 +238,6 @@
           };
           this.insertArr[4].flag = true;
         }
-        //上传图片
-        //this.uploadImg();
       },
       emptyContent() {
         this.content = "";
@@ -173,15 +252,41 @@
             errArr.push(err.msg);
           }
         });
+        //封面表单没有错误
         if (errArr.length === 0) {
-          //没有错误，可以提交
-          console.log(
-            this.title,
-            this.classification,
-            this.publicDate,
-            this.content
-          );
-          this.$toast.show(true, "提交成功");
+          //检查细节输入的东西有没有遗漏
+          this.detailList.forEach((detail, index) => {
+            //四个属性，如果每个都有值，则count递减
+            let count = 4;
+            for (const key in detail) {
+              if (Object.hasOwnProperty.call(detail, key)) {
+                const element = detail[key];
+                if (!element) {
+                  if (this.indexList.indexOf(index) === -1)
+                    this.indexList.push(index);
+                } else {
+                  count--;
+                }
+              }
+            }
+            //如果count为0，则移除细节错误
+            if (count === 0) {
+              const delIndex = this.indexList.indexOf(index);
+              this.indexList.splice(delIndex, 1);
+            }
+          });
+          //所有表单都没有错误
+          if (this.indexList.length === 0 && !this.disable) {
+            //没有错误，可以提交
+            console.log(
+              this.title,
+              this.classification,
+              this.publicDate,
+              this.content
+            );
+            console.log(this.detailList);
+            this.addMediaResource();
+          }
         } else {
           //表单验证不通过
           const errorMsg = errArr.shift();
@@ -294,10 +399,30 @@
     background: #52c41a;
     width: 18px;
     font-size: 12px;
-
     height: 18px;
     border-radius: 50%;
     line-height: 18px;
     text-align: center;
+  }
+  .insertSubmitButton {
+    margin-left: 160px;
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #706862;
+    background-color: white;
+    box-shadow: 0 3px #999;
+    border-left: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+  }
+  .insertSubmitButton:active {
+    box-shadow: 0 1px #666;
+    transform: translateY(4px);
   }
 </style>

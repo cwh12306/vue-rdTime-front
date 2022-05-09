@@ -11,8 +11,7 @@
               @blur="validateEmail"
               v-model="email"
               class="login-input"
-              type="email"
-              name="email"
+              type="text"
               placeholder="请输入邮箱地址"
               :class="[
                 { correct: loginArr[0].check === 'correct' },
@@ -242,6 +241,7 @@
                 sessionStorage.setItem("user-id", res.id);
                 sessionStorage.setItem("isLogin", true);
                 sessionStorage.setItem("username", res.username);
+                sessionStorage.setItem("avatar", res.avatar);
                 sessionStorage.setItem(
                   "role",
                   res.role === 0 ? "管理员" : "普通用户"
@@ -251,12 +251,13 @@
                 localStorage.setItem("rememberMe", true);
                 localStorage.setItem("isLogin", true);
                 localStorage.setItem("username", res.username);
+                localStorage.setItem("avatar", res.avatar);
                 localStorage.setItem(
                   "role",
                   res.role === 0 ? "管理员" : "普通用户"
                 );
               }
-              this.$router.replace("/");
+              this.$router.go(-1);
               this.$toast.show(true, "登录成功🎉🎉🎉");
             } else {
               this.$toast.show(false, "登录失败，邮箱或密码错误或您不是管理员");

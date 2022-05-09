@@ -56,6 +56,8 @@
     width: 100%;
     height: 300px;
     margin-bottom: 50px;
+    box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
+      0 9px 28px 8px #0000000d;
   }
   .img {
     width: 450px;
@@ -66,12 +68,11 @@
   }
   .content {
     position: absolute;
-    left: 400px;
+    left: 450px;
     top: 0;
     width: calc(100% - 450px);
     height: 300px;
     padding: 20px;
-    background: #f2f3f5;
   }
   .classification {
     color: #ed2947;

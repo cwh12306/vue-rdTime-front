@@ -5,11 +5,9 @@ import Login from "../views/login/Login.vue";
 import PersonalCenter from "../views/personalCenter/PersonalCenter.vue";
 import Insert from "$views/personalCenter/childViews/Insert.vue";
 import Delete from "$views/personalCenter/childViews/Delete.vue";
-import Update from "$views/personalCenter/childViews/Update.vue";
 import Comment from "$views/personalCenter/childViews/Comment.vue";
 
 import UserComment from "$views/personalCenter/childViews/UserComment.vue";
-import UserHistory from "$views/personalCenter/childViews/UserHistory.vue";
 
 Vue.use(VueRouter);
 
@@ -60,12 +58,6 @@ const routes = [
         },
       },
       {
-        path: "update",
-        components: {
-          personalCenterTab: Update,
-        },
-      },
-      {
         path: "comment",
         components: {
           personalCenterTab: Comment,
@@ -75,12 +67,6 @@ const routes = [
         path: "userComment",
         components: {
           personalCenterTab: UserComment,
-        },
-      },
-      {
-        path: "userHistory",
-        components: {
-          personalCenterTab: UserHistory,
         },
       },
     ],

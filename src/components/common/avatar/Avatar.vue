@@ -1,6 +1,6 @@
 <template>
   <div class="avatar">
-    <img ref="avatar" width="28" height="28" alt="" />
+    <img class="user-avatar" ref="avatar" :width="size" :height="size" alt="" />
   </div>
 </template>
 
@@ -8,6 +8,14 @@
   import { getAvatar } from "$network/personalCenter.js";
   export default {
     name: "Avatar",
+    props: {
+      size: {
+        type: Number,
+        default() {
+          return 28;
+        },
+      },
+    },
     data() {
       return {
         id:
@@ -27,11 +35,7 @@
 </script>
 
 <style scoped>
-  .avatar {
-    height: 28px;
-    width: 28px;
+  .user-avatar {
     border-radius: 50%;
-    overflow: hidden;
-    display: flex;
   }
 </style>

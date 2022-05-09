@@ -40,11 +40,13 @@
           localStorage.removeItem("username");
           localStorage.removeItem("role");
           localStorage.removeItem("user-id");
+          localStorage.removeItem("avatar");
         } else {
           sessionStorage.removeItem("isLogin");
           sessionStorage.removeItem("username");
           sessionStorage.removeItem("role");
           sessionStorage.removeItem("user-id");
+          sessionStorage.removeItem("avatar");
         }
         this.isLogin = false;
         this.username = "";
