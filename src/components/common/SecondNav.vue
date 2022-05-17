@@ -6,7 +6,9 @@
       v-for="(c, index) in content"
       :key="index"
     >
-      <div class="title">{{ c }}</div>
+      <router-link :to="c.id">
+        <div class="title">{{ c.title }}</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -26,7 +28,7 @@
         return {
           borderTop: `4px solid ${this.color}`,
           top: `114px`,
-          left: `${this.echelon * 122}px`,
+          left: `${this.echelon * 66}px`,
         };
       },
     },
@@ -89,14 +91,7 @@
     border-radius: 4px;
     padding-left: 10px;
     transition: 0.5s;
-  }
-  .second-items:hover {
     cursor: pointer;
-  }
-  .activeItem1 {
-    color: white;
-    background: #ea7066;
-    padding-left: 20px;
   }
   .activeItem2 {
     color: white;

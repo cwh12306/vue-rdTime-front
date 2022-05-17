@@ -19,9 +19,22 @@ export function getNewReply(uid) {
     params: { uid },
   });
 }
-export function getCommentAndReply(uid) {
+
+export function getEnglish() {
   return request({
-    url: "/tb/getCommentAndReply",
-    params: { uid },
+    url: "/tb/getEnglish",
+  });
+}
+
+export function getEnglishDetail(id) {
+  return request({
+    url: "/tb/getEnglishDetail",
+    params: { id },
+  });
+}
+export function getTeacherById(id) {
+  return request({
+    url: "/tb/getTeacherById",
+    params: { id },
   });
 }

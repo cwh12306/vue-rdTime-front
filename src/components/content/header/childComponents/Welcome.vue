@@ -1,6 +1,6 @@
 <template>
   <div class="welcome">
-    <div class="title">Welcome to TLSBooks.com</div>
+    <div class="title">Welcome to RDTime.com</div>
     <div class="title2">Educational Worksheets</div>
     <div class="login" @click="login" ref="loginSign" v-show="!isLogin">
       <i class="fa-solid fa-arrow-right-to-bracket"></i>
@@ -8,7 +8,7 @@
     <div class="personalCenter" v-show="isLogin" ref="personalCenter">
       <div class="cursor">
         <div class="redDot" v-show="total !== 0">您有{{ total }}条新消息!</div>
-        <div class="avatar"><Avatar /></div>
+        <div class="avatar"><Avatar :userId="Number(id)" /></div>
         <span>
           {{ username }}
         </span>
@@ -51,7 +51,8 @@
         isLogin: false,
         username: "",
         role: 1,
-        id: 0,
+        id:
+          localStorage.getItem("user-id") || sessionStorage.getItem("user-id"),
         personalCenterIsShow: false,
         total: 0,
       };
@@ -61,12 +62,10 @@
         this.isLogin = localStorage.getItem("isLogin");
         this.username = localStorage.getItem("username");
         this.role = localStorage.getItem("role");
-        this.id = localStorage.getItem("user-id");
       } else if (sessionStorage.getItem("isLogin")) {
         this.isLogin = sessionStorage.getItem("isLogin");
         this.username = sessionStorage.getItem("username");
         this.role = sessionStorage.getItem("role");
-        this.id = sessionStorage.getItem("user-id");
       }
       const loginSign = this.$refs.loginSign;
       loginSign.onmouseenter = () => {
@@ -84,10 +83,11 @@
         this.personalCenterIsShow = false;
       };
       //获取用户新的信息列表
-      getNewReply(this.id).then((res) => {
-        console.log(res);
-        this.total = res;
-      });
+      this.id &&
+        getNewReply(this.id).then((res) => {
+          console.log(res);
+          this.total = res;
+        });
     },
   };
 </script>

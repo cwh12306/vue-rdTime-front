@@ -9,22 +9,6 @@
         </div>
       </div>
       <div class="split split1"></div>
-      <div ref="grades" class="items" @click="gradeClick">
-        <div class="for-position">
-          <div class="icon icon2">
-            <i class="fa-solid fa-graduation-cap"></i>
-          </div>
-          年级
-        </div>
-      </div>
-      <SecondNav
-        @nav-active="gradeActive"
-        v-show="gradeIsShow"
-        :echelon="gradeEchelon"
-        :color="gradesColor"
-        :content="gradesContent"
-      />
-      <div class="split split2"></div>
       <div ref="subjects" class="items" @click="subjectClick">
         <div class="for-position">
           <div class="icon icon3">
@@ -50,15 +34,6 @@
         </div>
       </div>
       <div class="split split4"></div>
-      <div class="items" @click="moreClick">
-        <div class="for-position">
-          <div class="icon icon5">
-            <i class="fa-solid fa-angles-right"></i>
-          </div>
-          更多
-        </div>
-      </div>
-      <div class="split split5"></div>
     </div>
   </div>
 </template>
@@ -73,17 +48,11 @@
       homeClick() {
         this.$router.replace("/");
       },
-      gradeClick() {
-        this.$router.replace("/grade");
-      },
       subjectClick() {
         console.log(3);
       },
       teacherClick() {
-        console.log(4);
-      },
-      moreClick() {
-        console.log(5);
+        this.$router.push("/teacher");
       },
       gradeActive(flag) {
         this.gradeIsShow = flag;
@@ -96,32 +65,19 @@
       return {
         gradeIsShow: false,
         subjectIsShow: false,
-        subjectContent: ["外语", "书法", "历史", "音乐", "科学", "拼写"],
-        subjectColor: "#B5D56A",
-        gradesColor: "#EA7066",
-        gradesContent: [
-          "学龄前儿童",
-          "幼儿园",
-          "一年级",
-          "二年级",
-          "三年级",
-          "四年级",
-          "五年级",
-          "六年级",
+        subjectContent: [
+          { title: "外语", id: "/english" },
+          { title: "书法", id: "/handwriting" },
+          { title: "历史", id: "/history" },
+          { title: "音乐", id: "/music" },
+          { title: "科学", id: "/science" },
         ],
-        gradeEchelon: 1,
+        subjectColor: "#B5D56A",
         subjectEchelon: 2,
       };
     },
     mounted() {
-      const grades = this.$refs.grades;
       const subjects = this.$refs.subjects;
-      grades.onmouseenter = () => {
-        this.gradeIsShow = true;
-      };
-      grades.onmouseleave = () => {
-        this.gradeIsShow = false;
-      };
       subjects.onmouseenter = () => {
         this.subjectIsShow = true;
       };
@@ -142,10 +98,11 @@
   }
   .logo {
     position: absolute;
-    width: 188px;
+    width: 300px;
     height: 114px;
     background-image: url(/img/logo.png);
-    left: 19%;
+    left: 16%;
+    background-size: 100% 100%;
   }
   .nav-bar {
     position: absolute;

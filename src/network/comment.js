@@ -13,6 +13,7 @@ export function getComments(eid, pageNumber, pageSize) {
     params: { eid, pageNumber, pageSize },
   });
 }
+
 export function addReply(uid, reply, cid, eid) {
   return request({
     url: "/tb/addReply",
@@ -38,5 +39,32 @@ export function delComment(id) {
   return request({
     url: "/tb/delComment",
     params: { id },
+  });
+}
+
+export function getCommentsByUid(uid) {
+  return request({
+    url: "/tb/getCommentsByUid",
+    params: { uid },
+  });
+}
+
+export function getAllNewReply() {
+  return request({
+    url: "/tb/getAllNewReply",
+  });
+}
+
+export function getReplysByCid(cid) {
+  return request({
+    url: "/tb/getReplysByCid",
+    params: { cid },
+  });
+}
+
+export function updateNewReply(cid) {
+  return request({
+    url: "/tb/updateNewReply",
+    params: { cid },
   });
 }

@@ -82,7 +82,7 @@
             >
             <span
               class="deleteComment"
-              v-show="isManager"
+              v-show="isManager || comment.uid == uid"
               @click="deleteComment(index, null, comment.id)"
               >删除</span
             >
@@ -228,12 +228,13 @@
             this.cid,
             this.$route.query.id
           ).then((res) => {
-            if (res === 1) {
+            if (res) {
               this.$toast.show(true, "回复成功!");
               //伪造一个假回复用来回显
               this.commentList.forEach((comment) => {
                 if (comment.id === this.cid) {
                   comment.replys?.unshift({
+                    id: res,
                     avatar: this.avatar,
                     username: this.username,
                     newReply: this.managerReply,
@@ -303,10 +304,12 @@
         } else {
           addComment(this.uid, this.userComment, this.$route.query.id).then(
             (res) => {
-              if (res === 1) {
+              if (res) {
                 this.$toast.show(true, "发布评论成功!");
                 //伪造一个假评论用来回显
                 this.commentList.unshift({
+                  id: res,
+                  uid: this.uid,
                   avatar: this.avatar,
                   newComment: this.userComment,
                   newPublicTime: "刚刚",

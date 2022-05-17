@@ -29,21 +29,13 @@
             <li @click="tabActive" :class="{ current: currentClickTab === 2 }">
               删除资源<i class="fa-solid fa-circle-minus"></i></li
           ></router-link>
-          <router-link
-            to="/personalCenter/comment"
-            active-class="current"
-            replace
-          >
-            <li @click="tabActive" :class="{ current: currentClickTab === 3 }">
-              用户评论<i class="fa-solid fa-comment-dots"></i></li
-          ></router-link>
         </ul>
         <ul class="user-side-tab side-tab" v-show="role === '普通用户'">
           <router-link
             to="/personalCenter/userComment"
             active-class="current"
             replace
-            ><li @click="tabActive" :class="{ current: currentClickTab === 4 }">
+            ><li @click="tabActive" :class="{ current: currentClickTab === 3 }">
               发表过的评论<i class="fa-solid fa-comment-dots"></i></li
           ></router-link>
         </ul>
@@ -95,11 +87,8 @@
           case "删除资源":
             this.currentClickTab = 2;
             break;
-          case "用户评论":
-            this.currentClickTab = 3;
-            break;
           case "发表过的评论":
-            this.currentClickTab = 4;
+            this.currentClickTab = 3;
             break;
         }
       },

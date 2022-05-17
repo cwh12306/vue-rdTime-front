@@ -5,8 +5,7 @@ import Login from "../views/login/Login.vue";
 import PersonalCenter from "../views/personalCenter/PersonalCenter.vue";
 import Insert from "$views/personalCenter/childViews/Insert.vue";
 import Delete from "$views/personalCenter/childViews/Delete.vue";
-import Comment from "$views/personalCenter/childViews/Comment.vue";
-
+import EnglishDetail from "$views/home/childViews/English/childViews/EnglishDetail.vue";
 import UserComment from "$views/personalCenter/childViews/UserComment.vue";
 
 Vue.use(VueRouter);
@@ -22,8 +21,32 @@ const routes = [
     component: Home,
     children: [
       {
-        path: "grade",
-        component: () => import("$views/home/childViews/Grade.vue"),
+        path: "english",
+        component: () => import("$views/home/childViews/English/English.vue"),
+      },
+      {
+        path: "teacher",
+        component: () => import("$views/home/childViews/Teacher.vue"),
+      },
+      {
+        path: "englishDetail",
+        component: EnglishDetail,
+      },
+      {
+        path: "handwriting",
+        component: () => import("$views/home/childViews/Handwriting.vue"),
+      },
+      {
+        path: "history",
+        component: () => import("$views/home/childViews/History.vue"),
+      },
+      {
+        path: "music",
+        component: () => import("$views/home/childViews/Music.vue"),
+      },
+      {
+        path: "science",
+        component: () => import("$views/home/childViews/Science.vue"),
       },
       {
         path: "welcome",
@@ -55,12 +78,6 @@ const routes = [
         path: "delete",
         components: {
           personalCenterTab: Delete,
-        },
-      },
-      {
-        path: "comment",
-        components: {
-          personalCenterTab: Comment,
         },
       },
       {

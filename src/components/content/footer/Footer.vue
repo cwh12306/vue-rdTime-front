@@ -3,7 +3,7 @@
     <div class="divider"></div>
     <div class="footer-bg">
       <div class="offers">
-        <div class="title">TLSBooks Offers</div>
+        <div class="title">RDTime Offers</div>
         <ul class="offers-content">
           <li>
             <i class="fa-solid fa-angles-right"></i> thousands of print based
@@ -44,9 +44,9 @@
         </ul>
       </div>
       <div class="about">
-        <div class="about-title">About TLSBooks</div>
+        <div class="about-title">About RDTime</div>
         <div class="about-content">
-          TLSBooks is an educational website dedicated to<br />
+          RDTime is an educational website dedicated to<br />
           bringing you free worksheets and other materials. All<br />
           of the content on this website is free for individual or
           <br />classroom use. We believe that it should be fast and <br />easy

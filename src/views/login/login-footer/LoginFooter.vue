@@ -1,6 +1,6 @@
 <template>
   <div class="login-footer">
-    <p class="text">Go Look At Some TLSBooks</p>
+    <p class="text">Go Look At Some RDTime</p>
     <p class="copyright">Copyright &copy 2000-2022 Publishing</p>
   </div>
 </template>

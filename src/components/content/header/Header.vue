@@ -2,7 +2,7 @@
   <div class="header">
     <Welcome /><Nav />
     <div class="backImg">
-      <div class="title">TLSBooks.com</div>
+      <div class="title">RDTime.com</div>
     </div>
   </div>
 </template>
