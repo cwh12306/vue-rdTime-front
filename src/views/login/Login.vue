@@ -316,7 +316,10 @@
       validateConfirmPassword() {
         this.registerArr[3].flag =
           this.confirmPassword === this.registerPassword;
-        this.confirmPassword === this.registerPassword
+        this.confirmPassword === this.registerPassword &&
+        this.registerPassword !== "" &&
+        this.registerPassword.length >= 6 &&
+        this.registerPassword.length <= 12
           ? (this.registerArr[3].check = "correct")
           : (this.registerArr[3].check = "error");
       },

@@ -32,9 +32,17 @@ export function getEnglishDetail(id) {
     params: { id },
   });
 }
+
 export function getTeacherById(id) {
   return request({
     url: "/tb/getTeacherById",
     params: { id },
+  });
+}
+
+export function getSubject(subject) {
+  return request({
+    url: "/tb/getSubject",
+    params: { subject },
   });
 }

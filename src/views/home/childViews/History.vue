@@ -1,27 +1,96 @@
 <template>
   <div class="history">
-    <div class="handwriting-container">
-      <div class="view">
-        <div :class="{ banner: true, trans: flag }">
-          <img :src="imagesUrl[imgindex]" alt="" class="img" />
+    <div class="subject-container">
+      <p class="basicText headWelcome">
+        欢迎访问社会研究工作表页面！在这里，你可以找到有关历史和地理的工作表，包括涂色页面、单词搜索、写作活动、拼图等等。
+      </p>
+      <div class="divider"></div>
+      <h1 class="subject-title">多级历史工作表</h1>
+      <img width="189" height="253" src="img/subject/history1.jpg" alt="" />
+      <div class="pdfContent">
+        <div
+          class="subject-pdf"
+          :key="index"
+          v-for="(item, index) in subjectList[0]"
+        >
+          <span class="pdf-title" @click="openPdf(item.pdfUrl)">{{
+            item.title
+          }}</span>
+          <span class="pdf-contentText">——{{ item.newContentText }}</span>
+          <br />
         </div>
-        <button @click="prev" class="prev">
-          <i class="fa-solid fa-angle-left"></i>
-        </button>
-        <button @click="next" class="next">
-          <i class="fa-solid fa-angle-right"></i>
-        </button>
       </div>
+      <h2 class="subject-title">历史谜题</h2>
+      <img width="189" height="253" src="img/subject/history2.jpg" alt="" />
+      <div class="pdfContent">
+        <div
+          class="subject-pdf"
+          :key="index"
+          v-for="(item, index) in subjectList[1]"
+        >
+          <span class="pdf-title" @click="openPdf(item.pdfUrl)">{{
+            item.title
+          }}</span>
+          <span class="pdf-contentText">——{{ item.newContentText }}</span>
+          <br />
+        </div>
+      </div>
+
+      <h2 class="subject-title">地图工作表</h2>
+      <img width="189" height="253" src="img/subject/history3.jpg" alt="" />
+      <div class="pdfContent">
+        <div
+          class="subject-pdf"
+          :key="index"
+          v-for="(item, index) in subjectList[2]"
+        >
+          <span class="pdf-title" @click="openPdf(item.pdfUrl)">{{
+            item.title
+          }}</span>
+          <span class="pdf-contentText">——{{ item.newContentText }}</span>
+          <br />
+        </div>
+      </div>
+      <br />
+      <br />
+      <div class="divider"></div>
+      <Swiper :imgList="imagesUrl" />
     </div>
   </div>
 </template>
 
 <script>
+  import Swiper from "$components/common/swiper/Swiper.vue";
+  import { getSubject } from "$network/homeWelcome.js";
+
   export default {
     name: "History",
+    components: { Swiper },
+    mounted() {
+      getSubject("history").then((res) => {
+        const arr1 = [];
+        const arr2 = [];
+        const arr3 = [];
+        res.forEach((item, index) => {
+          if (index < 7) {
+            arr1.push(item);
+          } else if (index >= 7 && index < 16) {
+            arr2.push(item);
+          } else {
+            arr3.push(item);
+          }
+        });
+        this.subjectList.push(arr1, arr2, arr3);
+      });
+    },
+    methods: {
+      openPdf(pdfUrl) {
+        window.open(pdfUrl);
+      },
+    },
     data() {
       return {
-        imgindex: "0", //控制变量，默认显示第一张
+        subjectList: [],
         imagesUrl: [
           "img/history/1.jpg",
           "img/history/2.jpg",
@@ -49,70 +118,73 @@
           "img/history/24.jpg",
           "img/history/25.jpg",
         ],
-        flag: true,
       };
-    },
-    methods: {
-      //下一张
-      next() {
-        if (this.imgindex < this.imagesUrl.length - 1) {
-          this.imgindex++;
-        }
-      },
-      //上一张
-      prev() {
-        if (this.imgindex > 0) {
-          this.imgindex--;
-        }
-      },
     },
   };
 </script>
 
 <style scoped>
-  .handwriting-container {
+  .subject-container {
     padding: 20px;
-    width: 70%;
+    width: 50%;
     margin: auto;
   }
-  .img {
+  .basicText {
+    font-size: 14px;
+  }
+  .headWelcome {
+    margin-bottom: 20px;
+  }
+  .divider {
+    height: 3px;
+    width: 100%;
+    margin-bottom: 5px;
+    background-image: repeating-linear-gradient(
+      to right,
+      #f0c24b 0px,
+      #f0c24b 70px,
+      #b5d56a 70px,
+      #b5d56a 140px,
+      #ea7066 140px,
+      #ea7066 210px,
+      #84bed6 210px,
+      #84bed6 280px,
+      #a597e7 280px,
+      #a597e7 350px,
+      #ea77ad 350px,
+      #ea77ad 420px
+    );
+  }
+  .subject-title {
+    font-weight: 100;
+    color: #6c757d;
+    margin-bottom: 15px;
+  }
+  h1.subject-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  h2.subject-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .pdf-contentText {
+    font-size: 14px;
+    line-height: 26px;
+  }
+  .pdf-title {
+    font-size: 14px;
+    color: #e13123;
+    cursor: pointer;
+  }
+  .pdf-title:hover {
+    text-decoration: underline;
+  }
+  img {
     float: left;
+    margin-right: 20px;
   }
-  .trans {
-    transition: all 0.5s;
-  }
-  .view {
-    width: 1080px;
-    height: 810px;
-    box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
-      0 9px 28px 8px #0000000d;
-    position: relative;
-    margin: auto;
-  }
-  .prev {
-    position: absolute;
-    top: 50%;
-    left: -50px;
-    transform: translateY(-50%);
-    border: none;
-    background: none;
-    font-size: 80px;
-    color: #4b4b4b;
-    cursor: pointer;
-  }
-  .next:hover,
-  .prev:hover {
-    color: #3d3d3d;
-  }
-  .next {
-    position: absolute;
-    top: 50%;
-    right: -50px;
-    transform: translateY(-50%);
-    border: none;
-    background: none;
-    font-size: 80px;
-    color: #4b4b4b;
-    cursor: pointer;
+  .pdfContent {
+    margin-bottom: 20px;
   }
 </style>
